@@ -28,6 +28,7 @@ Django-environ for secure environment configuration (if enabled)
 To_do_Django/
 
 │
+
 ├── Todo/ # Main Django project
 
 │   ├── settings.py
@@ -37,6 +38,7 @@ To_do_Django/
 │   └── wsgi.py
 
 │
+
 ├── todoapp/              # To-Do app
 
 │   ├── models.py
@@ -46,7 +48,9 @@ To_do_Django/
 │   ├── urls.py
 
 │   └── templates/
+
 │
+
 ├── static/               # CSS, images, static files
 
 ├── templates/            # Shared templates
