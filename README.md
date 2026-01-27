@@ -26,22 +26,35 @@ Django-environ for secure environment configuration (if enabled)
 
 📁 Repository Structure
 To_do_Django/
+
 │
-├── Todo/                  # Main Django project
+├── Todo/ # Main Django project
+
 │   ├── settings.py
+
 │   ├── urls.py
+
 │   └── wsgi.py
+
 │
 ├── todoapp/              # To-Do app
+
 │   ├── models.py
+
 │   ├── views.py
+
 │   ├── urls.py
+
 │   └── templates/
 │
 ├── static/               # CSS, images, static files
+
 ├── templates/            # Shared templates
+
 ├── manage.py             # Django project entry point
+
 ├── requirements.txt      # Python dependency list
+
 └── .gitignore
 
 🏁 Getting Started
