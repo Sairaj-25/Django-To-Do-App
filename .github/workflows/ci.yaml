@@ -1,0 +1,38 @@
+name: Django CI
+
+on:
+    push:
+        branches: ["main", "master"]
+    pull_request:
+        branches: ["main", "master"]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        # Provide dummy environment variables for CI testing
+        env:
+            DJANGO_SECRET_KEY: "dummy-secret-key-for-ci-testing-only"
+            DEBUG: "True"
+
+        steps:
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.12"
+            cache: pip
+
+
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            # Assuming you have a requirement.txt file
+            pip install -r requirements.txt
+
+        - name: Check for missing migrations
+          run: |
+            python manage.py makemigrations --check --dry-run
+
+        - name: Run tests
+          run: |
+            python manage.py test
