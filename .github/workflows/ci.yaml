@@ -1,39 +1,88 @@
-name: Django CI
+name: Production Django CI
 
+# Trigger on pushes to main, and any Pull Requests targeting main
 on:
-    push:
-        branches: ["main", "master"]
-    pull_request:
-        branches: ["main", "master"]
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+# Cancel in-progress runs if a new commit is pushed to the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
+  lint-and-security:
+    name: Code Quality & Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-        # Provide dummy environment variables for CI testing
-        env:
-            DJANGO_SECRET_KEY: "dummy-secret-key-for-ci-testing-only"
-            DEBUG: "True"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'
 
-        steps:
-        - name: Checkout Code
-          uses: actions/checkout@v4
-        - name: Set up Python
-          uses: actions/setup-python@v5
-          with:
-            python-version: "3.12"
-            cache: pip
+      - name: Install Quality Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black bandit
 
-        - name: Install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            # Assuming you have a requirements.txt file
-            pip install -r requirements.txt
+      - name: Check Code Formatting (Black)
+        run: black --check .
 
-        - name: Check for missing migrations
-          run: |
-            python manage.py makemigrations --check --dry-run
+      - name: Lint Code (Flake8)
+        # Stop the build if there are Python syntax errors or undefined names
+        run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-        - name: Run tests
-          run: |
-            python manage.py test
+      - name: Security Scan (Bandit)
+        # Scans for common security issues in Python code
+        run: bandit -r . -ll -ii -x "venv,env,tests"
+
+  test:
+    name: Run Tests & Coverage
+    needs: lint-and-security # Waits for the lint job to pass first
+    runs-on: ubuntu-latest
+    
+    # Secure way to pass environment variables in CI
+    env:
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY || 'dummy-secret-key-for-ci' }}
+      DEBUG: "True"
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install coverage  # Install coverage tool for testing
+
+      - name: Check Migrations
+        # Ensures no one forgot to run `makemigrations` before pushing
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Run Tests with Coverage
+        # Runs tests and measures how much of your code is covered by them
+        run: |
+          coverage run manage.py test
+          coverage report -m
+          coverage xml # Generates a coverage.xml file
+
+      - name: Upload Coverage Report
+        # Saves the coverage report as a downloadable artifact in GitHub Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 14
