@@ -4,9 +4,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class Task(models.Model):
     # Task title
-    title = models.CharField(max_length=255,help_text="enter task title")
+    title = models.CharField(max_length=255, help_text="enter task title")
 
     # Description
     description = models.TextField(help_text="enter task details")
@@ -18,7 +19,9 @@ class Task(models.Model):
     create_time = models.DateTimeField(help_text="task is created at")
 
     # time of edit
-    edit_time = models.DateTimeField(help_text="task is edited at",blank=True,null=True)
+    edit_time = models.DateTimeField(
+        help_text="task is edited at", blank=True, null=True
+    )
 
     # Associate each task with user
     user = models.ForeignKey(User, verbose_name=("User"), on_delete=models.CASCADE)

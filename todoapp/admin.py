@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from todoapp import models
 from .models import Task
+
 # Register your models here.
 
 # @admin.register(Task)
@@ -11,4 +12,3 @@ from .models import Task
 #     search_fields = ( 'title', 'create_time', 'edit_time')
 
 admin.site.register(Task)
-    

@@ -7,19 +7,29 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Task',
+            name="Task",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(help_text='enter task title', max_length=255)),
-                ('description', models.TextField(help_text='enter task details')),
-                ('due_date', models.DateField(help_text='enter deadline of task')),
-                ('create_time', models.DateTimeField(help_text='task is created at')),
-                ('edit_time', models.DateTimeField(help_text='task is edited at')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(help_text="enter task title", max_length=255),
+                ),
+                ("description", models.TextField(help_text="enter task details")),
+                ("due_date", models.DateField(help_text="enter deadline of task")),
+                ("create_time", models.DateTimeField(help_text="task is created at")),
+                ("edit_time", models.DateTimeField(help_text="task is edited at")),
             ],
         ),
     ]

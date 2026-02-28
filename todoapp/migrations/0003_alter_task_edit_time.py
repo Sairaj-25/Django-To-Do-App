@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('todoapp', '0002_alter_task_edit_time'),
+        ("todoapp", "0002_alter_task_edit_time"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='task',
-            name='edit_time',
-            field=models.DateTimeField(blank=True, help_text='task is edited at', null=True),
+            model_name="task",
+            name="edit_time",
+            field=models.DateTimeField(
+                blank=True, help_text="task is edited at", null=True
+            ),
         ),
     ]
