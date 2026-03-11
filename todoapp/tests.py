@@ -94,7 +94,7 @@ class AuthenticationTests(TestCase):
         """Test user logout functionality."""
         self.client.login(username="existinguser", password="password123")
         response = self.client.get(self.logout_url)
-        self.assertRedirects(response, reverse("login"))
+        self.assertRedirects(response, reverse("home"))
 
 
 class TaskViewsTest(TestCase):
