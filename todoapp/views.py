@@ -49,8 +49,23 @@ def remove_task(request, pk):
     return redirect("/")
 
 
+@login_required(login_url="login")
 def edit_task(request, pk):
-    pass
+    task = get_object_or_404(Task, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        task.title = request.POST.get("title")
+        task.description = request.POST.get("description")
+        task.due_date = request.POST.get("due_date")
+        task.edit_time = now()
+        task.save()
+        messages.success(request, "Task updated successfully!")
+        return redirect("home")
+
+    # 👇 Make sure these lines are aligned exactly with the 'if' statement above!
+    # Do NOT indent them inside the 'if' block.
+    context = {"task": task}
+    return render(request, "edit_task.html", context)
 
 
 def search_task(request):
