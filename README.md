@@ -159,7 +159,7 @@ coverage report -m
 ```
 💡 Roadmap / Next Enhancements
 
-- [ ] Add task editing functionality (edit_task view integration).
+- [x] Add task editing functionality (edit_task view integration).
 
 - [ ] Implement AJAX for seamless, page-reload-free task updates.
 
