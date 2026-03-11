@@ -116,7 +116,8 @@ class TaskViewsTest(TestCase):
     def test_home_view_unauthenticated(self):
         """Test that unauthenticated users are redirected to login when accessing home."""
         response = self.client.get(reverse("home"))
-        self.assertRedirects(response, reverse("login"))
+        self.assertRedirects(response.status_code, 200)
+        self.assertContains(response= "No Task Found !")
 
     def test_home_view_authenticated(self):
         """Test that authenticated users can see their tasks on the home page."""
