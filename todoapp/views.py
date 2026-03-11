@@ -68,12 +68,13 @@ def edit_task(request, pk):
     return render(request, "edit_task.html", context)
 
 
+@login_required
 def search_task(request):
     q = request.GET.get("query", "")
     if q:
-        item_list = Task.objects.filter(title__icontains=q)
+        item_list = Task.objects.filter(user=request.user, title__icontains=q)
     else:
-        item_list = Task.objects.all().order_by("-create_time")
+        item_list = Task.objects.all(user=request.user).order_by("-create_time")
 
     context = {"item_list": item_list}
     return render(request, "index.html", context)
