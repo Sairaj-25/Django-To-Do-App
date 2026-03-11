@@ -94,7 +94,7 @@ class AuthenticationTests(TestCase):
         """Test user logout functionality."""
         self.client.login(username="existinguser", password="password123")
         response = self.client.get(self.logout_url)
-        self.assertRedirects(response, reverse("login"))
+        self.assertRedirects(response, reverse("home"))
 
 
 class TaskViewsTest(TestCase):
@@ -116,7 +116,8 @@ class TaskViewsTest(TestCase):
     def test_home_view_unauthenticated(self):
         """Test that unauthenticated users are redirected to login when accessing home."""
         response = self.client.get(reverse("home"))
-        self.assertRedirects(response, reverse("login"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["item_list"]), 0)
 
     def test_home_view_authenticated(self):
         """Test that authenticated users can see their tasks on the home page."""

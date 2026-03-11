@@ -4,29 +4,26 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import Task
-from .forms import TaskForm
 
 from django.utils.timezone import now
-
-# Create your views here.
-# def index(request):
-#     return render(request, 'index.html')
 
 
 def index(request):
     # Retrieve all to-do items ordered by date (newest first)
     if request.user.is_authenticated:
         item_list = Task.objects.filter(user=request.user).order_by("-create_time")
-        context = {"item_list": item_list}
-        return render(request, "index.html", context)
     else:
-        return redirect("login")
+        item_list = []
+    context = {"item_list": item_list}
+    return render(request, "index.html", context)
 
 
+@login_required(login_url="login")
 def add_task(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -70,10 +67,10 @@ def search_task(request):
 def user_register(request):
     context = {}
     if request.method == "POST":
-        username = request.POST["uname"]
-        useremail = request.POST["uemail"]
-        pass1 = request.POST["upass1"]
-        pass2 = request.POST["upass2"]
+        username = request.POST.get("uname")
+        useremail = request.POST.get("uemail")
+        pass1 = request.POST.get("upass1")
+        pass2 = request.POST.get("upass2")
 
         if pass1 == pass2:
             if User.objects.filter(email=useremail).exists():
@@ -104,31 +101,27 @@ def user_register(request):
 
 def user_login(request):
     if request.method == "POST":
-        identifier = request.POST["uemail"]
-        password = request.POST["upass"]
+        identifier = request.POST.get("uemail")
+        password = request.POST.get("upass")
+        user = None
 
-        user = authenticate(request, username=identifier, password=password)
+        try:
+            u = User.objects.get(email=identifier)
+            user = authenticate(request, username=u.username, password=password)
 
-        if not user:
-            try:
-                # Find username using email
-                u = User.objects.get(email=identifier)
-
-                user = authenticate(request, username=u.username, password=password)
-            except User.DoesNotExist:
-                user = None
+        except User.DoesNotExist:
+            # If not email, try username
+            user = authenticate(request, username=identifier, password=password)
 
         if user is not None:
             login(request, user)
             return redirect("/")
         else:
-            messages.error(request, "Invalid username or password")
-            return render(request, "Login.html")
+            messages.error(request, "Invalid username or passwordx")
 
-    else:
-        return render(request, "Login.html")
+    return render(request, "Login.html")
 
 
 def user_logout(request):
     logout(request)
-    return redirect("login")
+    return redirect("/")
