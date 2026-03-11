@@ -14,7 +14,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
   <div class="container">
       <a class="navbar-brand" href="/">TO-DO<span class="text-success">APP</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -25,29 +25,31 @@
               </li>
           </ul>
 
-          <div class="d-flex align-items-center gap-3">
-              <form class="d-flex" action="{% url 'search_task' %}" method="GET">
+          <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0">
+              
+              <form class="d-flex w-100" action="{% url 'search_task' %}" method="GET">
                   <div class="input-group">
                       <input class="form-control" type="search" name="query" placeholder="Search tasks..." aria-label="Search">
                       <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
                   </div>
               </form>
 
-              <div class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle text-light" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                      <i class="fas fa-user-circle fa-lg"></i>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end shadow">
-                      {% if user.is_authenticated %}
-                      <li class="px-3 py-2 text-muted small">Signed in as <b>{{ user.username }}</b></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                      {% else %}
-                      <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
-                      <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                      {% endif %}
-                  </ul>
+              <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                  {% if user.is_authenticated %}
+                      <span class="text-muted"><b>{{ user.username }}</b></span>
+                      <a class="btn btn-outline-danger btn-sm text-nowrap" href="{% url 'logout' %}">
+                          <i class="fas fa-sign-out-alt"></i> Logout
+                      </a>
+                  {% else %}
+                      <a class="btn btn-outline-primary btn-sm w-100 w-lg-auto" href="{% url 'login' %}">
+                          Login
+                      </a>
+                      <a class="btn btn-outline-primary btn-sm w-100 w-lg-auto" href="{% url 'register' %}">
+                          Register
+                      </a>
+                  {% endif %}
               </div>
+
           </div>
       </div>
   </div>
