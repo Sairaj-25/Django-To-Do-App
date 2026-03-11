@@ -1,22 +1,44 @@
-.body {
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+/* Base Body Styling */
+body {
+    background-color: #f4f6f9; /* Soft light gray background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.dropdown-item {
-    font-size: 1rem; /* Reduce font size for dropdown items */
+/* Navbar Enhancements */
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-
-.custom-header {
-    background-color: #ea7bd7; /* Light grey */
-    border-bottom: 1px solid #ae3a81; /* Subtle border */
-    padding: 10px 15px;
+/* Card Styling & Animations */
+.task-card {
+    border: none;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background-color: #ffffff;
 }
 
-.card-body {
-    background-color: #eda9e0de;
+.task-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
 }
 
-.custom-left {
-    margin-left: -20px;
+.card-header-custom {
+    background-color: #ffffff;
+    border-bottom: 2px solid #f0f2f5;
+    font-weight: 600;
+}
+
+/* Fix Dropdown alignment */
+.dropdown-menu {
+    min-width: 150px;
+}
+
+/* Empty State Styling */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px dashed #ced4da;
 }
